@@ -6,7 +6,15 @@ This project was created to make it easier to mock external APIs that are out of
 
 ## Installing the Aspire.Hosting.WireMock NuGet package
 
-Coming soon...
+[![NuGet](https://img.shields.io/nuget/v/Fredi.Aspire.Hosting.WireMock.svg)](https://www.nuget.org/packages/Fredi.Aspire.Hosting.WireMock)
+
+Install the `Fredi.Aspire.Hosting.WireMock` package into your Aspire App Host project, e.g. using the `dotnet` command line in the project directory:
+
+```shell
+dotnet add package Fredi.Aspire.Hosting.WireMock
+```
+
+Note: I couldn't push `Aspire.Hosting.WireMock` to NuGet because the `Aspire` package ID prefix is reserved.
 
 ## License
 

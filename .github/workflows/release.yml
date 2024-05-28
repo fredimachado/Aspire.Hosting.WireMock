@@ -81,7 +81,7 @@ jobs:
              fi
              # push package to nuget.org
              echo "Pushing package ${_file} to nuget.org"
-             dotnet nuget push "${_file}" -s "NUGET" -k ${{ secrets.NUGET_API_KEY }}
+             dotnet nuget push "${_file}" -s "NUGET" -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
              echo "PACKAGE_VERSION=${_releaseVersion}" >> $GITHUB_ENV
 
       - name: Create release
