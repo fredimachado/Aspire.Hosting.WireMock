@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      runId:
+        description: The run ID of the CI workflow to release NuGet artifacts from
+        required: true
+        type: string
+
+jobs:
+  push-package:
+    name: Release
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
+      DOTNET_MULTILEVEL_LOOKUP: 0
+      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
+
+    permissions:
+      packages: write
+
+    steps:
+      - name: Download workflow run details
+        run: |
+          workflowUrl="https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ inputs.runId }}"
+          curl -s -H "Accept: application/json" "${workflowUrl}" > workflow_details.json
+
+      - name: Extract workflow run commit SHA
+        uses: sergeysova/jq-action@v2
+        id: workflowsha
+        with:
+          cmd: 'jq .head_sha workflow_details.json -r'
+
+      - name: Download workflow run artifacts
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          run_id: ${{ inputs.runId }}
+          workflow_conclusion: success
+          name: nupkg
+      
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+
+      - name: Add nuget.org source
+        run: dotnet nuget add source --name NUGET https://www.nuget.org
+
+      - name: Push packages to nuget.org
+        run: |
+             _file=$(find ./ship -iname "*.nupkg" -print -quit)
+             _releaseVersion=""
+             echo "Found package ${_file}"
+             # strip dir path from file path
+             _filename="${_file##*/}"
+             # strip file extension from file name
+             _filenamewithoutext="${_filename%.*}"
+             # get version from file name
+             _packageVersion=$( \
+                 echo "$_filenamewithoutext" | \
+                 # Regex to match semantic version at end of string
+                 grep -oP '(?<=\.)[0-9]+\.[0-9]+\.[0-9]+((-[a-zA-Z]+)?(\.[0-9]+)*)*$' \
+             )
+             # get package id by truncating the version from the file name
+             _packageId="${_filenamewithoutext%%.$_packageVersion}"
+             echo "Got version '${_packageVersion}' for '${_packageId}'."
+             _releaseVersion=$_packageVersion
+             # verify package doesn't already exist
+             _packageUrl="https://api.nuget.org/v3/registration5-semver1/${_packageId}/${_packageVersion}.json"
+             echo "Checking for existing package at ${_packageUrl}"
+             _statusCode=$(curl -s -o /dev/null -I -w '%{http_code}' "${_packageUrl}")
+             echo "Status code ${_statusCode}"
+             if [ "${_statusCode}" -eq "200" ]; then
+                 echo "The package ${_packageId} with version ${_packageVersion} already exists on nuget.org"; exit 1
+             elif [ "${_statusCode}" -eq "404" ]; then
+                 echo "Confirmed package ${_packageId} with version ${_packageVersion} does not already exist on nuget.org"
+             else
+                 echo "Unexpected status code ${_statusCode} received from nuget.org"; exit 1
+             fi
+             # push package to nuget.org
+             echo "Pushing package ${_file} to nuget.org"
+             dotnet nuget push "${_file}" -s "NUGET" -k ${{ secrets.NUGET_API_KEY }}
+             echo "PACKAGE_VERSION=${_releaseVersion}" >> $GITHUB_ENV
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ env.PACKAGE_VERSION }}
+          commit: ${{ steps.workflowsha.outputs.value }}
+          generateReleaseNotes: true
+          draft: true
+          prerelease: ${{ contains(env.PACKAGE_VERSION, '-') }}

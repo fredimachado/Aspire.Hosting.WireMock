@@ -7,6 +7,11 @@
     <Description>API mocking support for .NET Aspire using WireMock.Net.</Description>
     <PackageTags>aspire hosting WireMock.Net mock api</PackageTags>
     <VersionPrefix Condition=" '$(VersionPrefix)' == '' ">0.0.1</VersionPrefix>
+    <!-- VersionSuffix used for local builds -->
+    <VersionSuffix>dev</VersionSuffix>
+    <!-- VersionSuffix to be used for CI builds -->
+    <VersionSuffix Condition=" '$(ContinuousIntegrationBuild)' == 'true' And '$(BuildNumber)' != '' ">ci.$(BuildNumber)</VersionSuffix>
+    <VersionSuffix Condition=" '$(ContinuousIntegrationBuild)' == 'true' And '$(IsShipCandidate)' == 'true' "></VersionSuffix>
     <Authors>Fredi Machado</Authors>
     <Copyright>Copyright © Fredi Machado</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
