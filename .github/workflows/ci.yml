@@ -12,42 +12,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     name: Build
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-      DOTNET_NOLOGO: true
-      DOTNET_ADD_GLOBAL_TOOLS_TO_PATH: false
-      DOTNET_MULTILEVEL_LOOKUP: 0
-      DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Install .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        global-json-file: "./global.json"
-
-    - name: Install Aspire workload
-      run: dotnet workload install aspire
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Build
-      run: dotnet build --no-restore --configuration Release -p:SourceRevisionId=$GITHUB_SHA
-
-    - name: Pack (ci)
-      run: dotnet pack --configuration Release --output ./artifacts/ci --verbosity normal -p:SourceRevisionId=$GITHUB_SHA
-
-    - name: Upload artifacts (packages)
-      uses: actions/upload-artifact@v4
-      with:
-        name: nupkg
-        path: ./artifacts/**/*.nupkg
-        retention-days: 5
+    uses: ./.github/workflows/_build.yml
 
   deploy:
     name: Deploy
