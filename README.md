@@ -16,6 +16,10 @@ dotnet add package Fredi.Aspire.Hosting.WireMock
 
 Note: I couldn't push `Aspire.Hosting.WireMock` to NuGet because the `Aspire` package ID prefix is reserved.
 
+## How to use
+
+Please check the [sample project](./samples/MockWeatherForecast).
+
 ## License
 
 Aspire.Hosting.WireMock is licensed under the [MIT License](./LICENSE).
