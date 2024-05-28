@@ -21,7 +21,7 @@ jobs:
       DOTNET_SYSTEM_CONSOLE_ALLOW_ANSI_COLOR_REDIRECTION: true
 
     permissions:
-      packages: write
+      contents: write
 
     steps:
       - name: Download workflow run details
