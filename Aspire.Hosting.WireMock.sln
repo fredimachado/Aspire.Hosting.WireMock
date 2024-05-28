@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aspire.Hosting.WireMock", "src\Aspire.Hosting.WireMock\Aspire.Hosting.WireMock.csproj", "{36EBA110-BC1E-4372-8EA4-0F82231CD35F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7957D47B-595F-402E-BE83-1AABDECE1416}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{CEFEA511-E921-4F44-9203-2F4F01627480}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WeatherForecast", "WeatherForecast", "{F54375EE-9E36-4C52-9516-6F7ABB00EBBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MockWeatherForecast.AppHost", "samples\MockWeatherForecast\MockWeatherForecast.AppHost\MockWeatherForecast.AppHost.csproj", "{8AC46C87-F785-4BB9-A645-4729EE2BD2AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockWeatherForecast.ServiceDefaults", "samples\MockWeatherForecast\MockWeatherForecast.ServiceDefaults\MockWeatherForecast.ServiceDefaults.csproj", "{BCC28766-3E82-4F45-8653-9E78E02DB749}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MockWeatherForecast.Web", "samples\MockWeatherForecast\MockWeatherForecast.Web\MockWeatherForecast.Web.csproj", "{03DC5626-75B9-46E9-8C81-20C1A36C6595}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{52349312-EC6E-44A2-B181-8256B66C2601}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{36EBA110-BC1E-4372-8EA4-0F82231CD35F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36EBA110-BC1E-4372-8EA4-0F82231CD35F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36EBA110-BC1E-4372-8EA4-0F82231CD35F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36EBA110-BC1E-4372-8EA4-0F82231CD35F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AC46C87-F785-4BB9-A645-4729EE2BD2AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC46C87-F785-4BB9-A645-4729EE2BD2AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC46C87-F785-4BB9-A645-4729EE2BD2AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC46C87-F785-4BB9-A645-4729EE2BD2AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCC28766-3E82-4F45-8653-9E78E02DB749}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCC28766-3E82-4F45-8653-9E78E02DB749}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCC28766-3E82-4F45-8653-9E78E02DB749}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCC28766-3E82-4F45-8653-9E78E02DB749}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03DC5626-75B9-46E9-8C81-20C1A36C6595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03DC5626-75B9-46E9-8C81-20C1A36C6595}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03DC5626-75B9-46E9-8C81-20C1A36C6595}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03DC5626-75B9-46E9-8C81-20C1A36C6595}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{36EBA110-BC1E-4372-8EA4-0F82231CD35F} = {7957D47B-595F-402E-BE83-1AABDECE1416}
+		{F54375EE-9E36-4C52-9516-6F7ABB00EBBE} = {CEFEA511-E921-4F44-9203-2F4F01627480}
+		{8AC46C87-F785-4BB9-A645-4729EE2BD2AD} = {F54375EE-9E36-4C52-9516-6F7ABB00EBBE}
+		{BCC28766-3E82-4F45-8653-9E78E02DB749} = {F54375EE-9E36-4C52-9516-6F7ABB00EBBE}
+		{03DC5626-75B9-46E9-8C81-20C1A36C6595} = {F54375EE-9E36-4C52-9516-6F7ABB00EBBE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1DAFA024-B571-4D38-A443-D3502F4F5EBD}
+	EndGlobalSection
+EndGlobal
