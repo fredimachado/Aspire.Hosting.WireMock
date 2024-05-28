@@ -14,6 +14,7 @@
     <VersionSuffix Condition=" '$(ContinuousIntegrationBuild)' == 'true' And '$(IsShipCandidate)' == 'true' "></VersionSuffix>
     <Authors>Fredi Machado</Authors>
     <Copyright>Copyright © Fredi Machado</Copyright>
+    <PackageId>Fredi.Aspire.Hosting.WireMock</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/fredimachado/Aspire.Hosting.WireMock</PackageProjectUrl>
     <RepositoryUrl>https://github.com/fredimachado/Aspire.Hosting.WireMock</RepositoryUrl>
