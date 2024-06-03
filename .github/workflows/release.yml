@@ -68,7 +68,8 @@ jobs:
              echo "Got version '${_packageVersion}' for '${_packageId}'."
              _releaseVersion=$_packageVersion
              # verify package doesn't already exist
-             _packageUrl="https://api.nuget.org/v3/registration5-semver1/${_packageId}/${_packageVersion}.json"
+             _packageIdLower="${_packageId,,}"
+             _packageUrl="https://api.nuget.org/v3/registration5-semver1/${_packageIdLower}/${_packageVersion}.json"
              echo "Checking for existing package at ${_packageUrl}"
              _statusCode=$(curl -s -o /dev/null -I -w '%{http_code}' "${_packageUrl}")
              echo "Status code ${_statusCode}"
