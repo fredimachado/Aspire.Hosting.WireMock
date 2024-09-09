@@ -16,10 +16,11 @@ public static class WireMockNetExtensions
     /// <param name="builder">The <see cref="IDistributedApplicationBuilder"/>.</param>
     /// <param name="name">The name of the resource. This name will be used as the connection string name when referenced in a dependency.</param>
     /// <param name="port">External port</param>
+    /// <param name="enableWireMockInspector">Enable WireMock Inspector</param>
     /// <returns>A reference to the <see cref="IResourceBuilder{WireMockNetResource}"/>.</returns>
-    public static IResourceBuilder<WireMockNetResource> AddWireMockNet(this IDistributedApplicationBuilder builder, string name, int? port = null)
+    public static IResourceBuilder<WireMockNetResource> AddWireMockNet(this IDistributedApplicationBuilder builder, string name, int? port = null, bool enableWireMockInspector = false)
     {
-        var wireMockResource = new WireMockNetResource(name);
+        var wireMockResource = new WireMockNetResource(name,enableWireMockInspector);
 
         return builder
             .AddResource(wireMockResource)

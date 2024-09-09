@@ -3,6 +3,7 @@ using Aspire.Hosting.Lifecycle;
 using RestEase;
 using WireMock.Client;
 using WireMock.Client.Extensions;
+using WireMock.Net.Extensions.WireMockInspector;
 
 namespace Aspire.Hosting.WireMock;
 internal class WireMockNetConfigHook : IDistributedApplicationLifecycleHook
@@ -24,6 +25,11 @@ internal class WireMockNetConfigHook : IDistributedApplicationLifecycleHook
                     RestClient.For<IWireMockAdminApi>(new Uri(wireMockInstance.PrimaryEndpoint.Url, UriKind.Absolute));
                 var mappingBuilder = _wireMockAdminApi.GetMappingBuilder();
                 wireMockInstance.ApiMappingBuilder?.Invoke(mappingBuilder);
+
+                if(wireMockInstance.EnabledWireMockInspector)
+                {
+                    WireMockServerExtensions.Inspect(wireMockInstance.PrimaryEndpoint.Url);
+                }
             }
         }
 

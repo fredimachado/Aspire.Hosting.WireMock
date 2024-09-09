@@ -7,7 +7,8 @@ namespace Aspire.Hosting;
 /// A resource that represents a WireMock.Net resource.
 /// </summary>
 /// <param name="name">The resource name.</param>
-public class WireMockNetResource(string name) : ContainerResource(name), IResourceWithServiceDiscovery
+/// <param name="enableWireMockInspector">Enable WireMock Inspector</param>
+public class WireMockNetResource(string name, bool enableWireMockInspector) : ContainerResource(name), IResourceWithServiceDiscovery
 {
     internal const string PrimaryEndpointName = "http";
 
@@ -19,4 +20,7 @@ public class WireMockNetResource(string name) : ContainerResource(name), IResour
     /// Gets the primary endpoint for the server.
     /// </summary>
     public EndpointReference PrimaryEndpoint => _primaryEndpoint ??= new(this, PrimaryEndpointName);
+    
+    
+     public bool EnabledWireMockInspector => enableWireMockInspector;
 }

@@ -29,6 +29,7 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+    <PackageReference Include="WireMock.Net.Extensions.WireMockInspector" />
     <PackageReference Include="WireMock.Net.RestClient" />
   </ItemGroup>
 
