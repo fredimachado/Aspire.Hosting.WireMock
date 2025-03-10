@@ -1,5 +1,4 @@
-﻿using Aspire.Hosting.ApplicationModel;
-using WireMock.Client.Builders;
+﻿using WireMock.Client.Builders;
 
 namespace Aspire.Hosting;
 
