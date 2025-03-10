@@ -60,8 +60,10 @@ public static class WireMockNetExtensions
                     return;
                 }
 
-                var _wireMockAdminApi = RestClient.For<IWireMockAdminApi>(new Uri(resource.PrimaryEndpoint.Url, UriKind.Absolute));
-                var mappingBuilder = _wireMockAdminApi.GetMappingBuilder();
+                await notificationService.WaitForResourceHealthyAsync(resource.Name, cancellationToken);
+
+                var wireMockAdminApi = RestClient.For<IWireMockAdminApi>(new Uri(resource.PrimaryEndpoint.Url, UriKind.Absolute));
+                var mappingBuilder = wireMockAdminApi.GetMappingBuilder();
                 resource.ApiMappingBuilder?.Invoke(mappingBuilder);
 
                 await notificationService.PublishUpdateAsync(resource, state => state with { State = new ResourceStateSnapshot(KnownResourceStates.Running, KnownResourceStateStyles.Success) });
