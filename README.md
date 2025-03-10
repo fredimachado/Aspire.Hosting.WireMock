@@ -20,6 +20,15 @@ Note: I couldn't push `Aspire.Hosting.WireMock` to NuGet because the `Aspire` pa
 
 Please check the [sample project](./samples/MockWeatherForecast).
 
+## Open WireMock Inspector Command
+
+![image](https://github.com/user-attachments/assets/5bd38e80-7d47-4393-bcfc-1c2c9eee48c8)
+
+**Note:** Requires installation of the [WireMockInspector](https://github.com/WireMock-Net/WireMockInspector) tool.
+```
+dotnet tool install WireMockInspector --global --no-cache --ignore-failed-sources
+```
+
 ## License
 
 Aspire.Hosting.WireMock is licensed under the [MIT License](./LICENSE).
