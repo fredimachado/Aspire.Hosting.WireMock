@@ -7,6 +7,7 @@ var apiService = builder.AddWireMockNet("apiservice")
 
 builder.AddProject<Projects.MockWeatherForecast_Web>("webfrontend")
     .WithExternalHttpEndpoints()
-    .WithReference(apiService);
+    .WithReference(apiService)
+    .WaitFor(apiService);
 
 builder.Build().Run();

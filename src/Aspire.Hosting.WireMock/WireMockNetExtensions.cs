@@ -1,7 +1,11 @@
-﻿using Aspire.Hosting.ApplicationModel;
-using Aspire.Hosting.Lifecycle;
+﻿using Aspire.Hosting.Lifecycle;
 using Aspire.Hosting.WireMock;
+using Microsoft.Extensions.DependencyInjection;
+using RestEase;
+using System.Data.Common;
+using WireMock.Client;
 using WireMock.Client.Builders;
+using WireMock.Client.Extensions;
 
 namespace Aspire.Hosting;
 
@@ -25,7 +29,8 @@ public static class WireMockNetExtensions
             .AddResource(wireMockResource)
             .WithHttpEndpoint(port: port, targetPort: 80, name: WireMockNetResource.PrimaryEndpointName)
             .WithImage(WireMockNetContainerImageTags.Image, WireMockNetContainerImageTags.Tag)
-            .WithImageRegistry(WireMockNetContainerImageTags.Registry);
+            .WithImageRegistry(WireMockNetContainerImageTags.Registry)
+            .WithHttpHealthCheck("/__admin/mappings");
     }
 
     /// <summary>
@@ -36,9 +41,53 @@ public static class WireMockNetExtensions
     /// <returns></returns>
     public static IResourceBuilder<WireMockNetResource> WithApiMappingBuilder(this IResourceBuilder<WireMockNetResource> builder, Func<AdminApiMappingBuilder, Task> configure)
     {
-        builder.ApplicationBuilder.Services.TryAddLifecycleHook<WireMockNetConfigHook>();
-
         builder.Resource.ApiMappingBuilder = configure;
+
+        builder.ApplicationBuilder.Eventing.Subscribe<ResourceReadyEvent>(builder.Resource, async (@event, cancellationToken) =>
+        {
+            if (builder.Resource is not WireMockNetResource resource)
+            {
+                return;
+            }
+
+            var notificationService = @event.Services.GetRequiredService<ResourceNotificationService>();
+
+            try
+            {
+                var connectionString = await resource.ConnectionStringExpression.GetValueAsync(cancellationToken).ConfigureAwait(false);
+
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    await notificationService.PublishUpdateAsync(resource, state => state with { State = new ResourceStateSnapshot("No connection string", KnownResourceStateStyles.Error) });
+                    return;
+                }
+
+                if (!Uri.TryCreate(connectionString, UriKind.Absolute, out _))
+                {
+                    var connectionBuilder = new DbConnectionStringBuilder
+                    {
+                        ConnectionString = connectionString
+                    };
+
+                    if (connectionBuilder.ContainsKey("Endpoint") && Uri.TryCreate(connectionBuilder["Endpoint"].ToString(), UriKind.Absolute, out var endpoint))
+                    {
+                        connectionString = endpoint.ToString();
+                    }
+                }
+
+                var _wireMockAdminApi = RestClient.For<IWireMockAdminApi>(new Uri(connectionString));
+
+                var mappingBuilder = _wireMockAdminApi.GetMappingBuilder();
+                resource.ApiMappingBuilder?.Invoke(mappingBuilder);
+
+                await notificationService.PublishUpdateAsync(resource, state => state with { State = new ResourceStateSnapshot(KnownResourceStates.Running, KnownResourceStateStyles.Success) });
+            }
+            catch (Exception ex)
+            {
+                await notificationService.PublishUpdateAsync(resource, state => state with { State = new ResourceStateSnapshot(ex.Message, KnownResourceStateStyles.Error) });
+            }
+            
+        });
 
         return builder;
     }
