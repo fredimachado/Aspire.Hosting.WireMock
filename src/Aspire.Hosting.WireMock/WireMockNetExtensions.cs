@@ -72,7 +72,6 @@ public static class WireMockNetExtensions
             {
                 await notificationService.PublishUpdateAsync(resource, state => state with { State = new ResourceStateSnapshot(ex.Message, KnownResourceStateStyles.Error) });
             }
-
         });
 
         return builder;
