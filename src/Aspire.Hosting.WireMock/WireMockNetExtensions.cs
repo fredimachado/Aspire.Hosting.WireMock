@@ -54,29 +54,13 @@ public static class WireMockNetExtensions
 
             try
             {
-                var connectionString = await resource.ConnectionStringExpression.GetValueAsync(cancellationToken).ConfigureAwait(false);
-
-                if (string.IsNullOrWhiteSpace(connectionString))
+                if (!resource.PrimaryEndpoint.IsAllocated)
                 {
-                    await notificationService.PublishUpdateAsync(resource, state => state with { State = new ResourceStateSnapshot("No connection string", KnownResourceStateStyles.Error) });
+                    await notificationService.PublishUpdateAsync(resource, state => state with { State = new ResourceStateSnapshot("Endpoint is not allocated.", KnownResourceStateStyles.Error) });
                     return;
                 }
 
-                if (!Uri.TryCreate(connectionString, UriKind.Absolute, out _))
-                {
-                    var connectionBuilder = new DbConnectionStringBuilder
-                    {
-                        ConnectionString = connectionString
-                    };
-
-                    if (connectionBuilder.ContainsKey("Endpoint") && Uri.TryCreate(connectionBuilder["Endpoint"].ToString(), UriKind.Absolute, out var endpoint))
-                    {
-                        connectionString = endpoint.ToString();
-                    }
-                }
-
-                var _wireMockAdminApi = RestClient.For<IWireMockAdminApi>(new Uri(connectionString));
-
+                var _wireMockAdminApi = RestClient.For<IWireMockAdminApi>(new Uri(resource.PrimaryEndpoint.Url, UriKind.Absolute));
                 var mappingBuilder = _wireMockAdminApi.GetMappingBuilder();
                 resource.ApiMappingBuilder?.Invoke(mappingBuilder);
 
