@@ -1,3 +1,7 @@
+# Check the official WireMock Aspire package
+
+https://github.com/wiremock/WireMock.Net/wiki/Using-WireMock.Net.Aspire
+
 # Aspire.Hosting.WireMock ![CI](https://github.com/fredimachado/Aspire.Hosting.WireMock/actions/workflows/ci.yml/badge.svg)
 
 Aspire.Hosting.WireMock adds API mocking support for [.NET Aspire](https://github.com/dotnet/aspire) using WireMock.Net.
